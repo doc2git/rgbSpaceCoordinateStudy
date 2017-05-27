@@ -2,10 +2,31 @@
 <html>
 <head>
     <style>
-        body{margin:0; padding:0 width:100%; height:100%; font-family:"monospace"}
-        body div {height: 5.5%;}
-        body div div:nth-of-type(1){display:inline-block; float:left; width:80px;}
-        body div div:nth-of-type(2){display:inline-block; float:left; width:150px;}
+        *{
+            margin:0;
+            padding:0;
+            font-size:12px;
+            color:#333;
+            font-family:"monospace"
+        }
+        .container{
+            overflow:hidden;
+            margin:4px;
+            padding: 6px;
+            border:2px dashed #bfbfbf;
+        }
+        .container>div{
+            clear:both;
+        }
+        .container div div{
+            display:inline-block;
+            float:left;
+            height:100%;
+            line-height:100%;
+            font-size:12px;
+        }
+        .container div div:nth-of-type(1){width:80px;}
+        .container div div:nth-of-type(2){width:150px;}
     </style>
 </head>
 <body>
@@ -19,21 +40,46 @@
         if(num>255){console.error("传入的参数大于255");  num=255;}
         return num===0?"00":""+a[parseInt(num / 16)] + a[num % 16];
     }
+    var oContainer=document.createElement("div");
+    oContainer.className="container";
+    function appendToContainer(){
+        var oRow=document.createElement("div");
+        oRow.style.backgroundColor=color;
+        oRow.className="row";
+        var oHexCode=document.createElement("div");
+        oHexCode.innerText=hexCode;
+        var oColor=document.createElement("div");
+        oColor.innerText=color;
+        var other=document.createElement("div");
+        other.innerHTML=`&nbsp;&nbsp;&nbsp;&nbsp;第${++count}个色址: ${color}`;
+        oRow.appendChild(oHexCode);
+        oRow.appendChild(oColor);
+        oRow.appendChild(other);
+        oContainer.appendChild(oRow);
+    }
     for (var i = 0; i <a.length ; i++) {
         for (var j = 0; j <a.length ; j++) {
             for (var k = 0; k <a.length ; k++) {
                 var rgbSum=a[i]+a[j]+a[k];
-                if(rgbSum===0||rgbSum===255*3) continue;
+//                if(rgbSum===0||rgbSum===255*3) continue;
                 var hexCode=`#${getHexCode(a[i])}${getHexCode(a[j])}${getHexCode(a[k])}`;
                 var color=`rgb(${a[i]},${a[j]},${a[k]})`;
-                htmlStr+=`
-                <div style="background-color:${color};">
-                    <div>${hexCode}</div>
-                    <div>${color}</div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;第${++count}个色址: ${color}
-                </div>`;
+                appendToContainer(hexCode,color);
             }
         }
     }
-    document.body.innerHTML=htmlStr;
+    document.body.appendChild(oContainer);
+    var oRows=oContainer.getElementsByClassName("row");
+    var winClientWidth=document.documentElement.clientWidth || document.body.clientWidth;
+    var winClientHeight=document.documentElement.clientHeight || document.body.clientHeight;
+    for (var i = 0; i < oRows.length; i++) {
+        oRows[i].style.width = parseFloat(getComputedStyle(oContainer, null).width) + "px";
+        oRows[i].style.width=winClientWidth -24 + "px";
+        oRows[i].style.height= (winClientHeight -24) / count  + "px";
+        var oFontContainters=oRows[i].getElementsByTagName("div");
+        for (var j = 0; j < oFontContainters.length; j++) {
+            oFontContainters[j].style.height=oRows[i].style.height;
+            oFontContainters[j].style.lineHeight=oRows[i].style.height;
+        }
+    }
 </script>
