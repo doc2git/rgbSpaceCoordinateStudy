@@ -6,7 +6,7 @@
             margin:0;
             padding:0;
             font-size:12px;
-            color:#333;
+            color:#373737;
             font-family:"monospace"
         }
         .container{
@@ -21,12 +21,68 @@
         .container div div{
             display:inline-block;
             float:left;
-            height:100%;
             line-height:100%;
             font-size:12px;
+            background-color:inherit;
         }
-        .container div div:nth-of-type(1){width:80px;}
-        .container div div:nth-of-type(2){width:150px;}
+        @media (min-width:480px) {
+            .container div div{
+                margin:0 2%;
+                text-align:center;
+            }
+            .container div div:nth-of-type(1) {
+                width: 80px;
+            }
+            .container div div:nth-of-type(2) {
+                width: 150px;
+            }
+            /*
+            .container div div:nth-of-type(3) {
+            }
+            */
+        }
+        @media (min-width:350px) and (max-width:480px) {
+            .container div div:nth-of-type(1) {
+            }
+            .container div div:nth-of-type(1):after,
+            .container div div:nth-of-type(2):after{
+                content:" :-) ,  ";
+            }
+            /*
+            .container div div:nth-of-type(2) {
+            }
+            .container div div:nth-of-type(3) {
+            }
+            */
+            .container div div:nth-of-type(3):after {
+                content:";"
+            }
+        }
+        @media (max-width:350px) {
+            .container div{text-align:left;}
+            .container div div:nth-of-type(1) {
+                width: 50px;
+            }
+            .container div div:nth-of-type(1):after,
+            .container div div:nth-of-type(2):after{
+                content:", ";
+            }
+            .container div div:nth-of-type(2) {
+                width: 102px;
+            }
+            .container div div:nth-of-type(3):before {
+                clear:both;
+            }
+            .container div div:nth-of-type(3) {
+                display:block;
+                width: 100%;
+                text-align:left;
+            }
+            .container div div:nth-of-type(3):after {
+                position:relative;
+                content:";"
+            }
+        }
     </style>
 </head>
 <body>
@@ -55,6 +111,7 @@
         oRow.appendChild(oHexCode);
         oRow.appendChild(oColor);
         oRow.appendChild(other);
+        oRow.style.height=Math.ceil(((document.documentElement.clientHeight||document.body.clientHeight)-24)/Math.pow(a.length,3))+"px";
         oContainer.appendChild(oRow);
     }
     for (var i = 0; i <a.length ; i++) {
@@ -69,17 +126,4 @@
         }
     }
     document.body.appendChild(oContainer);
-    var oRows=oContainer.getElementsByClassName("row");
-    var winClientWidth=document.documentElement.clientWidth || document.body.clientWidth;
-    var winClientHeight=document.documentElement.clientHeight || document.body.clientHeight;
-    for (var i = 0; i < oRows.length; i++) {
-        oRows[i].style.width = parseFloat(getComputedStyle(oContainer, null).width) + "px";
-        oRows[i].style.width=winClientWidth -24 + "px";
-        oRows[i].style.height= (winClientHeight -24) / count  + "px";
-        var oFontContainters=oRows[i].getElementsByTagName("div");
-        for (var j = 0; j < oFontContainters.length; j++) {
-            oFontContainters[j].style.height=oRows[i].style.height;
-            oFontContainters[j].style.lineHeight=oRows[i].style.height;
-        }
-    }
 </script>
