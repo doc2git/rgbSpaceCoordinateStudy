@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{margin:0; padding:0 width:100%; height:100%; font-family:"monospace"}
+        body div {height: 5.5%;}
+        body div div:nth-of-type(1){display:inline-block; float:left; width:80px;}
+        body div div:nth-of-type(2){display:inline-block; float:left; width:150px;}
+    </style>
+</head>
+<body>
+</body>
+</html>
+<script>
+    var htmlStr=``; var a=[0,127,255]; var count=0;
+    function getHexCode(num){
+        var a=[0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"];
+        if(num<0){console.error("传入的参数小于0");  num=0;}
+        if(num>255){console.error("传入的参数大于255");  num=255;}
+        return num===0?"00":""+a[parseInt(num / 16)] + a[num % 16];
+    }
+    for (var i = 0; i <a.length ; i++) {
+        for (var j = 0; j <a.length ; j++) {
+            for (var k = 0; k <a.length ; k++) {
+                var rgbSum=a[i]+a[j]+a[k];
+                if(rgbSum===0||rgbSum===255*3) continue;
+                var hexCode=`#${getHexCode(a[i])}${getHexCode(a[j])}${getHexCode(a[k])}`;
+                var color=`rgb(${a[i]},${a[j]},${a[k]})`;
+                htmlStr+=`
+                <div style="background-color:${color};">
+                    <div>${hexCode}</div>
+                    <div>${color}</div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;第${++count}个色址: ${color}
+                </div>`;
+            }
+        }
+    }
+    document.body.innerHTML=htmlStr;
+</script>
